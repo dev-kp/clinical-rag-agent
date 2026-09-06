@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Data (raw fetched docs, embeddings cache, eval results are committed selectively)
+ingest/raw/
+ingest/cache/
+*.db
+*.sqlite3
+
+# Node / frontend
+web/node_modules/
+web/dist/
+web/.vite/
+
+# Docker
+*.pid
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
