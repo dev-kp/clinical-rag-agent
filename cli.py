@@ -1,5 +1,8 @@
 import sys
 
+from core.graph.build import build_graph
+from core.graph.state import AgentState
+from core.llm.fake import FakeLLMProvider
 from core.providers.fake import FakeEmbeddingProvider
 from core.stores.pgvector import PgVectorStore
 from ingest.chunk import Chunk
@@ -8,9 +11,10 @@ from ingest.embed import embed_and_store
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python cli.py [populate|ask <query>]")
+        print("Usage: python cli.py [populate|ask|agent] <query>")
         print("Example: python cli.py populate")
-        print("Example: python cli.py ask 'syphilis treatment in pregnancy'")
+        print("Example: python cli.py ask 'syphilis treatment'")
+        print("Example: python cli.py agent 'syphilis treatment in pregnancy'")
         sys.exit(1)
 
     command = sys.argv[1]
@@ -24,6 +28,13 @@ def main():
 
         query = " ".join(sys.argv[2:])
         ask_query(query)
+    elif command == "agent":
+        if len(sys.argv) < 3:
+            print("Usage: python cli.py agent <query>")
+            sys.exit(1)
+
+        query = " ".join(sys.argv[2:])
+        run_agent(query)
     else:
         print(f"Unknown command: {command}")
         sys.exit(1)
@@ -112,6 +123,42 @@ def populate_store() -> None:
     embed_and_store(test_chunks, provider, store)
     store.close()
     print(f"Stored {len(test_chunks)} chunks successfully.")
+
+
+def run_agent(query: str) -> None:
+    """Run the agent graph: retrieve, grade, generate, verify."""
+    dsn = "postgresql://postgres:postgres@localhost:5433/clinical_rag_test"
+    dimension = 16
+
+    embedding_provider = FakeEmbeddingProvider(dimension=dimension)
+    vector_store = PgVectorStore(dsn, dimension=dimension)
+    llm_provider = FakeLLMProvider()
+
+    graph = build_graph(
+        llm_provider=llm_provider,
+        vector_store=vector_store,
+        embedding_provider=embedding_provider,
+    )
+
+    print(f"Query: {query}\n")
+
+    initial_state = AgentState(question=query)
+    final_state = graph.invoke(initial_state)
+
+    print(f"Iterations: {final_state.iteration}")
+    print(f"Chunks retrieved: {len(final_state.retrieved)}")
+    print(f"Verdict: {final_state.verdict}\n")
+
+    if final_state.answer:
+        print(f"Answer:\n{final_state.answer}\n")
+        if final_state.citations:
+            print(f"Citations: {', '.join(final_state.citations)}")
+        else:
+            print("No citations")
+    else:
+        print("No answer generated")
+
+    vector_store.close()
 
 
 def ask_query(query: str) -> None:

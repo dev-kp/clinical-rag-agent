@@ -1,10 +1,10 @@
 import re
-from typing import Protocol
 
 from core.graph.state import AgentState
+from core.llm.base import LLMProvider
 from core.providers.base import EmbeddingProvider
 from core.stores.base import VectorStore
-from core.llm.base import LLMProvider
+
 
 def plan_query(state: AgentState) -> AgentState:
     """Optionally refine the question for better retrieval.

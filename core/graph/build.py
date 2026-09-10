@@ -1,4 +1,4 @@
-from typing import Any, Protocol
+from typing import Any
 
 from langgraph.graph import END, StateGraph
 
@@ -10,10 +10,9 @@ from core.graph.nodes import (
     verify_citations,
 )
 from core.graph.state import AgentState
-from core.stores.base import VectorStore
-from core.providers.base import EmbeddingProvider
 from core.llm.base import LLMProvider
-
+from core.providers.base import EmbeddingProvider
+from core.stores.base import VectorStore
 
 
 def build_graph(
