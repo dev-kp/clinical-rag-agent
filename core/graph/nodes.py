@@ -4,13 +4,7 @@ from typing import Protocol
 from core.graph.state import AgentState
 from core.providers.base import EmbeddingProvider
 from core.stores.base import VectorStore
-
-
-class LLMProvider(Protocol):
-    def grade(self, question: str, context: str) -> dict: ...
-
-    def generate(self, question: str, context: str) -> str: ...
-
+from core.llm.base import LLMProvider
 
 def plan_query(state: AgentState) -> AgentState:
     """Optionally refine the question for better retrieval.

@@ -11,18 +11,9 @@ from core.graph.nodes import (
 )
 from core.graph.state import AgentState
 from core.stores.base import VectorStore
+from core.providers.base import EmbeddingProvider
+from core.llm.base import LLMProvider
 
-
-class EmbeddingProvider(Protocol):
-    dimension: int
-
-    def embed(self, texts: list[str]) -> list[list[float]]: ...
-
-
-class LLMProvider(Protocol):
-    def grade(self, question: str, context: str) -> dict: ...
-
-    def generate(self, question: str, context: str) -> str: ...
 
 
 def build_graph(
