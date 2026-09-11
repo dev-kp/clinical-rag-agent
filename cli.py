@@ -8,7 +8,9 @@ from core.graph.state import AgentState
 from core.llm.base import LLMProvider
 from core.llm.fake import FakeLLMProvider
 from core.llm.groq import GroqLLMProvider
+from core.providers.base import EmbeddingProvider
 from core.providers.fake import FakeEmbeddingProvider
+from core.providers.huggingface import HuggingFaceEmbeddingProvider
 from core.stores.pgvector import PgVectorStore
 from ingest.chunk import Chunk
 from ingest.embed import embed_and_store
@@ -16,6 +18,26 @@ from ingest.embed import embed_and_store
 load_dotenv()
 
 sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[union-attr]
+
+
+def get_embedding_provider() -> EmbeddingProvider:
+    """Build the embedding provider based on environment configuration.
+
+    Uses HuggingFaceEmbeddingProvider (real) if HF_API_KEY is set,
+    otherwise falls back to FakeEmbeddingProvider (deterministic, no
+    network). All three CLI commands use this so the dimension they embed
+    with always matches the dimension the vector store was created with.
+    """
+    hf_api_key = os.environ.get("HF_API_KEY")
+    if hf_api_key:
+        hf_model = os.environ.get(
+            "HF_EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
+        )
+        print(f"Using HuggingFaceEmbeddingProvider (real embeddings, model={hf_model})")
+        return HuggingFaceEmbeddingProvider(api_key=hf_api_key, model=hf_model)
+
+    print("HF_API_KEY not set, using FakeEmbeddingProvider")
+    return FakeEmbeddingProvider(dimension=16)
 
 
 def main():
@@ -52,10 +74,9 @@ def main():
 def populate_store() -> None:
     """Populate the vector store with test chunks."""
     dsn = "postgresql://postgres:postgres@localhost:5433/clinical_rag_test"
-    dimension = 16
 
-    provider = FakeEmbeddingProvider(dimension=dimension)
-    store = PgVectorStore(dsn, dimension=dimension)
+    provider = get_embedding_provider()
+    store = PgVectorStore(dsn, dimension=provider.dimension)
 
     test_chunks = [
         Chunk(
@@ -141,10 +162,9 @@ def run_agent(query: str) -> None:
     otherwise falls back to FakeLLMProvider (deterministic, no network).
     """
     dsn = "postgresql://postgres:postgres@localhost:5433/clinical_rag_test"
-    dimension = 16
 
-    embedding_provider = FakeEmbeddingProvider(dimension=dimension)
-    vector_store = PgVectorStore(dsn, dimension=dimension)
+    embedding_provider = get_embedding_provider()
+    vector_store = PgVectorStore(dsn, dimension=embedding_provider.dimension)
 
     llm_provider: LLMProvider
     groq_api_key = os.environ.get("GROQ_API_KEY")
@@ -186,10 +206,9 @@ def run_agent(query: str) -> None:
 def ask_query(query: str) -> None:
     """Search for and return top-k chunks matching the query."""
     dsn = "postgresql://postgres:postgres@localhost:5433/clinical_rag_test"
-    dimension = 16
 
-    provider = FakeEmbeddingProvider(dimension=dimension)
-    store = PgVectorStore(dsn, dimension=dimension)
+    provider = get_embedding_provider()
+    store = PgVectorStore(dsn, dimension=provider.dimension)
 
     print(f"Query: {query}\n")
 

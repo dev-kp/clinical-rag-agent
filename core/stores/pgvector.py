@@ -13,8 +13,11 @@ class PgVectorStore:
     natively later, this is the hand-rolled version behind the same
     VectorStore interface."""
 
-    def __init__(self, dsn: str, dimension: int, connect_timeout: int = 5):
+    def __init__(
+        self, dsn: str, dimension: int, table: str = "chunks", connect_timeout: int = 5
+    ):
         self.dimension = dimension
+        self.table = table
         self._conn = psycopg.connect(dsn, autocommit=True, connect_timeout=connect_timeout)
         self._conn.execute("CREATE EXTENSION IF NOT EXISTS vector")
         register_vector(self._conn)
@@ -26,7 +29,7 @@ class PgVectorStore:
     def _ensure_schema(self) -> None:
         self._conn.execute(
             f"""
-            CREATE TABLE IF NOT EXISTS chunks (
+            CREATE TABLE IF NOT EXISTS {self.table} (
                 chunk_id TEXT PRIMARY KEY,
                 doc_id TEXT NOT NULL,
                 section_path TEXT NOT NULL,
@@ -38,15 +41,18 @@ class PgVectorStore:
             )
             """
         )
-        self._conn.execute("CREATE INDEX IF NOT EXISTS chunks_tsv_idx ON chunks USING gin(tsv)")
+        self._conn.execute(
+            f"CREATE INDEX IF NOT EXISTS {self.table}_tsv_idx ON {self.table} USING gin(tsv)"
+        )
 
     def upsert(self, chunks: list[Chunk], embeddings: list[list[float]]) -> None:
         if len(chunks) != len(embeddings):
             raise ValueError("chunks and embeddings must be the same length")
 
         self._conn.cursor().executemany(
-            """
-            INSERT INTO chunks (chunk_id, doc_id, section_path, anchor, source_url, text, embedding)
+            f"""
+            INSERT INTO {self.table}
+                (chunk_id, doc_id, section_path, anchor, source_url, text, embedding)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (chunk_id) DO UPDATE SET
                 doc_id = EXCLUDED.doc_id,
@@ -68,15 +74,15 @@ class PgVectorStore:
         vector_ranking = [
             row[0]
             for row in self._conn.execute(
-                "SELECT chunk_id FROM chunks ORDER BY embedding <=> %s::vector LIMIT %s",
+                f"SELECT chunk_id FROM {self.table} ORDER BY embedding <=> %s::vector LIMIT %s",
                 (query_embedding, candidate_pool),
             ).fetchall()
         ]
         keyword_ranking = [
             row[0]
             for row in self._conn.execute(
-                """
-                SELECT chunk_id FROM chunks
+                f"""
+                SELECT chunk_id FROM {self.table}
                 WHERE tsv @@ plainto_tsquery('english', %s)
                 ORDER BY ts_rank(tsv, plainto_tsquery('english', %s)) DESC
                 LIMIT %s
@@ -94,9 +100,9 @@ class PgVectorStore:
         rows = {
             row[0]: row
             for row in self._conn.execute(
-                """
+                f"""
                 SELECT chunk_id, doc_id, section_path, anchor, source_url, text
-                FROM chunks WHERE chunk_id = ANY(%s)
+                FROM {self.table} WHERE chunk_id = ANY(%s)
                 """,
                 (fused_ids,),
             ).fetchall()

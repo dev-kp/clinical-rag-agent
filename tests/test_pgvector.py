@@ -15,11 +15,11 @@ TEST_DSN = os.environ.get(
 @pytest.fixture
 def pg_store():
     try:
-        store = PgVectorStore(TEST_DSN, dimension=16)
+        store = PgVectorStore(TEST_DSN, dimension=16, table="chunks_test")
     except psycopg.OperationalError as e:
         pytest.skip(f"no test Postgres available at {TEST_DSN}: {e}")
 
-    store._conn.execute("TRUNCATE chunks")
+    store._conn.execute("TRUNCATE chunks_test")
     yield store
     store.close()
 
