@@ -145,14 +145,14 @@ def run_agent(query: str) -> None:
     initial_state = AgentState(question=query)
     final_state = graph.invoke(initial_state)
 
-    print(f"Iterations: {final_state.iteration}")
-    print(f"Chunks retrieved: {len(final_state.retrieved)}")
-    print(f"Verdict: {final_state.verdict}\n")
+    print(f"Iterations: {final_state['iteration']}")
+    print(f"Chunks retrieved: {len(final_state['retrieved'])}")
+    print(f"Verdict: {final_state['verdict']}\n")
 
-    if final_state.answer:
-        print(f"Answer:\n{final_state.answer}\n")
-        if final_state.citations:
-            print(f"Citations: {', '.join(final_state.citations)}")
+    if final_state["answer"]:
+        print(f"Answer:\n{final_state['answer']}\n")
+        if final_state["citations"]:
+            print(f"Citations: {', '.join(final_state['citations'])}")
         else:
             print("No citations")
     else:

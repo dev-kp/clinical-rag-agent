@@ -7,13 +7,18 @@ from core.stores.base import VectorStore
 
 
 def plan_query(state: AgentState) -> AgentState:
-    """Optionally refine the question for better retrieval.
+    """Refine the question for better retrieval.
 
-    On first iteration, the original question is used.
-    On subsequent iterations, the grader may have specified what's missing.
+    On the first pass, use the question as-is. On retries, narrow the
+    query to just the terms the grader said were missing, so the next
+    retrieval attempt actually searches for something different instead
+    of repeating the same query and finding nothing new.
     """
     if state.iteration == 0:
         state.sub_queries = [state.question]
+    elif state.missing_terms:
+        state.sub_queries.append(" ".join(state.missing_terms))
+
     return state
 
 
@@ -42,6 +47,7 @@ def grade_evidence(state: AgentState, llm_provider: LLMProvider) -> AgentState:
     """Ask LLM: do we have enough chunks to answer?
 
     Returns a verdict: "sufficient" (answer now) or "need_more" (search again).
+    Also records what's missing so plan_query can target it next iteration.
     """
     if not state.retrieved:
         state.verdict = "need_more"
@@ -51,6 +57,7 @@ def grade_evidence(state: AgentState, llm_provider: LLMProvider) -> AgentState:
 
     response = llm_provider.grade(question=state.question, context=context)
     state.verdict = response.get("verdict", "need_more")
+    state.missing_terms = response.get("missing", [])
 
     return state
 

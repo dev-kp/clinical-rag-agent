@@ -18,5 +18,6 @@ class AgentState:
     iteration: int = 0
     max_iterations: int = 3
     verdict: str = ""
+    missing_terms: list[str] = field(default_factory=list)
     answer: str = ""
     citations: list[str] = field(default_factory=list)

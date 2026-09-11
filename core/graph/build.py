@@ -44,13 +44,13 @@ def build_graph(
         if state.verdict == "sufficient":
             return "generate"
         if state.iteration < state.max_iterations:
-            return "retrieve"
+            return "plan_query"
         return "abstain"
 
     graph.add_conditional_edges(
         "grade_evidence",
         route_after_grade,
-        {"generate": "generate", "retrieve": "retrieve", "abstain": END},
+        {"plan_query": "plan_query", "generate": "generate", "abstain": END},
     )
 
     graph.add_edge("generate", "verify_citations")

@@ -6,18 +6,22 @@ class FakeLLMProvider:
     """
 
     def grade(self, question: str, context: str) -> dict:
-        """Grade: sufficient if context has key terms from question."""
+        """Grade: sufficient if context has key terms from question.
+
+        Reports which key terms are missing so plan_query can target them
+        on the next retrieval attempt.
+        """
         question_lower = question.lower()
         context_lower = context.lower()
 
         key_terms = [w for w in question_lower.split() if len(w) > 3]
+        missing = [term for term in key_terms if term not in context_lower]
 
-        matches = sum(1 for term in key_terms if term in context_lower)
-        match_ratio = matches / len(key_terms) if key_terms else 0
+        match_ratio = (len(key_terms) - len(missing)) / len(key_terms) if key_terms else 0
 
         if match_ratio >= 0.5:
-            return {"verdict": "sufficient", "reason": "Key terms found"}
-        return {"verdict": "need_more", "reason": "Insufficient context"}
+            return {"verdict": "sufficient", "reason": "Key terms found", "missing": []}
+        return {"verdict": "need_more", "reason": "Insufficient context", "missing": missing}
 
     def generate(self, question: str, context: str) -> str:
         """Generate a fake answer citing the first chunk."""
