@@ -1,12 +1,21 @@
+import os
 import sys
+
+from dotenv import load_dotenv
 
 from core.graph.build import build_graph
 from core.graph.state import AgentState
+from core.llm.base import LLMProvider
 from core.llm.fake import FakeLLMProvider
+from core.llm.groq import GroqLLMProvider
 from core.providers.fake import FakeEmbeddingProvider
 from core.stores.pgvector import PgVectorStore
 from ingest.chunk import Chunk
 from ingest.embed import embed_and_store
+
+load_dotenv()
+
+sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[union-attr]
 
 
 def main():
@@ -126,13 +135,26 @@ def populate_store() -> None:
 
 
 def run_agent(query: str) -> None:
-    """Run the agent graph: retrieve, grade, generate, verify."""
+    """Run the agent graph: retrieve, grade, generate, verify.
+
+    Uses GroqLLMProvider (real) if GROQ_API_KEY is set in the environment,
+    otherwise falls back to FakeLLMProvider (deterministic, no network).
+    """
     dsn = "postgresql://postgres:postgres@localhost:5433/clinical_rag_test"
     dimension = 16
 
     embedding_provider = FakeEmbeddingProvider(dimension=dimension)
     vector_store = PgVectorStore(dsn, dimension=dimension)
-    llm_provider = FakeLLMProvider()
+
+    llm_provider: LLMProvider
+    groq_api_key = os.environ.get("GROQ_API_KEY")
+    if groq_api_key:
+        groq_model = os.environ.get("GROQ_CHAT_MODEL", "openai/gpt-oss-20b")
+        print(f"Using GroqLLMProvider (real LLM, model={groq_model})\n")
+        llm_provider = GroqLLMProvider(api_key=groq_api_key, model=groq_model)
+    else:
+        print("GROQ_API_KEY not set, using FakeLLMProvider\n")
+        llm_provider = FakeLLMProvider()
 
     graph = build_graph(
         llm_provider=llm_provider,
