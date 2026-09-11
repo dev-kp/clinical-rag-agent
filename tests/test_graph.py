@@ -1,4 +1,5 @@
 from core.graph.build import build_graph
+from core.graph.nodes import extract_citations
 from core.graph.state import AgentState
 from core.llm.fake import FakeLLMProvider
 from core.providers.fake import FakeEmbeddingProvider
@@ -110,3 +111,21 @@ def test_hallucinated_citation_is_caught_by_verify_citations():
 
     assert result.citations == []
     assert "cannot provide a reliable answer" in result.answer
+
+
+def test_extract_citations_handles_real_chunk_id_format():
+    # Real chunk ids from ingest/chunk.py's _chunk_id look like
+    # "doc-id::hash::index", not the simple "chunk-001" style used in
+    # most tests. The extraction regex must allow colons.
+    text = (
+        "Doxycycline is an alternative "
+        "[sti-syphilis-primary-secondary::3836bbeb70::0] and ceftriaxone "
+        "may also be used [sti-syphilis-neuro::a200e4c04d::0]."
+    )
+
+    citations = extract_citations(text)
+
+    assert citations == [
+        "sti-syphilis-primary-secondary::3836bbeb70::0",
+        "sti-syphilis-neuro::a200e4c04d::0",
+    ]

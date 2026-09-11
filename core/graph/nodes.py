@@ -93,5 +93,10 @@ def verify_citations(state: AgentState) -> AgentState:
 
 
 def extract_citations(text: str) -> list[str]:
-    """Extract [chunk-id] references from text."""
-    return re.findall(r"\[([a-z0-9\-]+)\]", text)
+    """Extract [chunk-id] references from text.
+
+    Real chunk ids look like "doc-id::hash::index" (see ingest/chunk.py's
+    _chunk_id), so the pattern must allow colons alongside the simpler
+    "chunk-001" style ids used in tests.
+    """
+    return re.findall(r"\[([a-zA-Z0-9\-:]+)\]", text)
