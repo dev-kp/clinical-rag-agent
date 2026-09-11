@@ -69,15 +69,10 @@ class PgVectorStore:
         )
 
     def search(self, query_text: str, query_embedding: list[float], k: int) -> list[SearchResult]:
+        """Hybrid search: cosine similarity + keyword match, fused with RRF."""
         candidate_pool = max(k * 4, 20)
 
-        vector_ranking = [
-            row[0]
-            for row in self._conn.execute(
-                f"SELECT chunk_id FROM {self.table} ORDER BY embedding <=> %s::vector LIMIT %s",
-                (query_embedding, candidate_pool),
-            ).fetchall()
-        ]
+        vector_ranking = self._vector_ranking(query_embedding, candidate_pool)
         keyword_ranking = [
             row[0]
             for row in self._conn.execute(
@@ -95,8 +90,37 @@ class PgVectorStore:
         if not fused:
             return []
 
-        fused_ids = [f.item_id for f in fused]
         score_by_id = {f.item_id: f.score for f in fused}
+        return self._fetch_results([f.item_id for f in fused], score_by_id)
+
+    def search_vector_only(self, query_embedding: list[float], k: int) -> list[SearchResult]:
+        """Pure cosine-similarity search, no keyword fusion.
+
+        Used as the ablation baseline (config 1: single-shot, vector-only)
+        to isolate the value hybrid retrieval adds on top of vector search
+        alone.
+        """
+        ranked_ids = self._vector_ranking(query_embedding, k)
+        if not ranked_ids:
+            return []
+
+        # Distance-based score: closer rank = higher score, same shape as RRF
+        # output so downstream code doesn't need to special-case this path.
+        score_by_id = {chunk_id: 1.0 / (rank + 1) for rank, chunk_id in enumerate(ranked_ids)}
+        return self._fetch_results(ranked_ids, score_by_id)
+
+    def _vector_ranking(self, query_embedding: list[float], limit: int) -> list[str]:
+        return [
+            row[0]
+            for row in self._conn.execute(
+                f"SELECT chunk_id FROM {self.table} ORDER BY embedding <=> %s::vector LIMIT %s",
+                (query_embedding, limit),
+            ).fetchall()
+        ]
+
+    def _fetch_results(
+        self, chunk_ids: list[str], score_by_id: dict[str, float]
+    ) -> list[SearchResult]:
         rows = {
             row[0]: row
             for row in self._conn.execute(
@@ -104,12 +128,12 @@ class PgVectorStore:
                 SELECT chunk_id, doc_id, section_path, anchor, source_url, text
                 FROM {self.table} WHERE chunk_id = ANY(%s)
                 """,
-                (fused_ids,),
+                (chunk_ids,),
             ).fetchall()
         }
 
         results = []
-        for chunk_id in fused_ids:
+        for chunk_id in chunk_ids:
             row = rows[chunk_id]
             results.append(
                 SearchResult(

@@ -30,9 +30,6 @@ dev = [
     "mypy>=1.11",
 ]
 eval = [
-    "ragas>=0.2",
-    "langsmith>=0.1",
-    "datasets>=3.0",
     "pandas>=2.2",
 ]
 

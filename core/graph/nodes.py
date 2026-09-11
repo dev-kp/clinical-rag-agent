@@ -92,11 +92,18 @@ def verify_citations(state: AgentState) -> AgentState:
     return state
 
 
+_DASH_VARIANTS = "‐‑‒–—−"  # hyphen, non-breaking hyphen, figure/en/em dash, minus
+
+
 def extract_citations(text: str) -> list[str]:
     """Extract [chunk-id] references from text.
 
     Real chunk ids look like "doc-id::hash::index" (see ingest/chunk.py's
     _chunk_id), so the pattern must allow colons alongside the simpler
-    "chunk-001" style ids used in tests.
+    "chunk-001" style ids used in tests. LLMs sometimes render the plain
+    ASCII hyphen in a doc-id as a Unicode dash variant (observed: U+2011
+    non-breaking hyphen) when formatting text, so those are matched too
+    and normalized back to '-' to match the real, ASCII-hyphenated ids.
     """
-    return re.findall(r"\[([a-zA-Z0-9\-:]+)\]", text)
+    matches = re.findall(rf"\[([a-zA-Z0-9\-:{_DASH_VARIANTS}]+)\]", text)
+    return [re.sub(f"[{_DASH_VARIANTS}]", "-", m) for m in matches]

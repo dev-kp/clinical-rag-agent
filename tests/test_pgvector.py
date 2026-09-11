@@ -106,3 +106,29 @@ def test_search_against_empty_table_returns_empty_list(pg_store):
     results = pg_store.search("syphilis treatment", query_embedding, k=1)
 
     assert results == []
+
+
+def test_search_vector_only_ignores_keyword_match(pg_store):
+    provider = FakeEmbeddingProvider(dimension=16)
+
+    chunks = [
+        make_chunk("chunk-1", "The primary treatment for syphilis is penicillin"),
+        make_chunk("chunk-2", "COVID-19 vaccines are widely available"),
+    ]
+    embeddings = provider.embed([c.text for c in chunks])
+    pg_store.upsert(chunks, embeddings)
+
+    query_embedding = provider.embed(["syphilis treatment"])[0]
+    results = pg_store.search_vector_only(query_embedding, k=2)
+
+    assert len(results) == 2
+    assert {r.chunk_id for r in results} == {"chunk-1", "chunk-2"}
+
+
+def test_search_vector_only_against_empty_table_returns_empty_list(pg_store):
+    provider = FakeEmbeddingProvider(dimension=16)
+
+    query_embedding = provider.embed(["anything"])[0]
+    results = pg_store.search_vector_only(query_embedding, k=1)
+
+    assert results == []

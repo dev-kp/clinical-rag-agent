@@ -129,3 +129,14 @@ def test_extract_citations_handles_real_chunk_id_format():
         "sti-syphilis-primary-secondary::3836bbeb70::0",
         "sti-syphilis-neuro::a200e4c04d::0",
     ]
+
+
+def test_extract_citations_normalizes_unicode_dash_variants():
+    # Observed live: Groq's model sometimes renders the ASCII hyphen in a
+    # doc-id as a Unicode non-breaking hyphen (U+2011) when formatting an
+    # answer, which would otherwise silently fail to match seen_chunk_ids.
+    text = "See [sti‑chlamydia::e7f6b57289::0] for the regimen."
+
+    citations = extract_citations(text)
+
+    assert citations == ["sti-chlamydia::e7f6b57289::0"]
