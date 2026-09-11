@@ -1,0 +1,405 @@
+[
+  {
+    "question_id": "gq-001",
+    "question": "Which nonopioid pharmacologic therapy is no longer considered a first-line treatment for osteoarthritis?",
+    "category": "single-hop",
+    "ground_truth_answer": "Acetaminophen.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::239626f68a::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-002",
+    "question": "What is the approximate effectiveness of erythromycin in treating pneumonia caused by C. trachomatis in infants?",
+    "category": "single-hop",
+    "ground_truth_answer": "Approximately 80%.",
+    "ground_truth_chunk_ids": [
+      "sti-chlamydia::eac0859146::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-003",
+    "question": "How often should patients who continue to receive opioids for acute pain be evaluated?",
+    "category": "single-hop",
+    "ground_truth_answer": "At least every 2 weeks.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::c3badbd483::3"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-004",
+    "question": "According to the guideline excerpt, how many times higher is the risk of opioid overdose for patients taking 50 to <100 MME/day compared with those taking 1 to <20 MME/day?",
+    "category": "single-hop",
+    "ground_truth_answer": "1.9 to 4.6 times higher.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::f605e4be72::1"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-005",
+    "question": "What is the recommended minimum frequency for reviewing PDMP data before prescribing opioids for subacute or chronic pain according to the CDC guideline?",
+    "category": "single-hop",
+    "ground_truth_answer": "Before initial opioid prescriptions for subacute or chronic pain and then every 3 months or more frequently during long-term opioid therapy.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::6066c61f6b::3"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-006",
+    "question": "What is the recommended dosing schedule for pre\u2011exposure immunization of adults at high risk of mpox with the third\u2011generation smallpox vaccine (SMV)?",
+    "category": "single-hop",
+    "ground_truth_answer": "2 doses of SMV administered at least 28 days (4 weeks) apart.",
+    "ground_truth_chunk_ids": [
+      "cig-schedules::13314e628a::2"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-007",
+    "question": "Which organization published the guideline on vaccination of specific populations?",
+    "category": "single-hop",
+    "ground_truth_answer": "Public Health Agency of Canada",
+    "ground_truth_chunk_ids": [
+      "cig-populations::76d26e47b4::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-008",
+    "question": "What alternative antibiotic regimen is suggested for HIV-infected patients with neurosyphilis who are allergic to penicillin?",
+    "category": "single-hop",
+    "ground_truth_answer": "Ceftriaxone 1\u20132\u202fg IV daily for 10\u201314\u202fdays, following the same recommendations as for non\u2011HIV patients allergic to penicillin; if concern exists, perform skin testing and consider penicillin desensitization in consultation with a specialist.",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-hiv::312078ac8e::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-009",
+    "question": "According to the guideline, what is the recommended timeframe for referring sex partners of patients with disseminated gonococcal infection for evaluation, testing, and presumptive treatment?",
+    "category": "single-hop",
+    "ground_truth_answer": "Sex partners with whom they have had sexual contact during the previous 60 days.",
+    "ground_truth_chunk_ids": [
+      "sti-gonorrhea-adults::0eac57a210::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-010",
+    "question": "What is the recommended schedule for clinical and serologic evaluation of patients with HIV and latent syphilis after therapy?",
+    "category": "single-hop",
+    "ground_truth_answer": "Patients with HIV and latent syphilis infection should be evaluated clinically and serologically at 6, 12, 18, and 24 months after therapy.",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-hiv::c8a0f23ea8::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-011",
+    "question": "According to the guideline, what should be done for sex partners of a person who has had sexual contact with a partner with PID within the 60 days preceding symptom onset?",
+    "category": "single-hop",
+    "ground_truth_answer": "They should be evaluated, tested, and presumptively treated for chlamydia and gonorrhea, regardless of the PID etiology or pathogens isolated.",
+    "ground_truth_chunk_ids": [
+      "sti-pid::bc8ec1bd56::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-012",
+    "question": "When should women with a diagnosis of chlamydial or gonococcal pelvic inflammatory disease be retested after treatment?",
+    "category": "single-hop",
+    "ground_truth_answer": "They should be retested 3 months after treatment, regardless of whether their sex partners have been treated. If retesting at 3 months is not possible, they should be retested whenever they next seek medical care within 12 months after treatment.",
+    "ground_truth_chunk_ids": [
+      "sti-pid::0308bfaece::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-013",
+    "question": "What is the negative predictive value of the revised penicillin skin test kit evaluated among 455 patients with previous allergy history?",
+    "category": "single-hop",
+    "ground_truth_answer": "98%",
+    "ground_truth_chunk_ids": [
+      "sti-penicillin-allergy::9b7b57f0c4::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-014",
+    "question": "During a penicillin G shortage, what is the recommended dosing regimen for procaine penicillin G in infants and children with clinical evidence of congenital syphilis?",
+    "category": "single-hop",
+    "ground_truth_answer": "Procaine penicillin G 50,000 units/kg body weight per dose, administered intramuscularly up to the adult dose of 2.4\u202fmillion units per day, given as a single daily dose for 10\u202fdays.",
+    "ground_truth_chunk_ids": [
+      "sti-congenital-syphilis::05ffe29010::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-015",
+    "question": "Under what circumstances are no further interventions required for a person exposed to hepatitis B via percutaneous or mucosal exposure?",
+    "category": "single-hop",
+    "ground_truth_answer": "No further interventions are required if the exposed person is known to be immune following hepatitis B infection or if the person has an anti\u2011HBs titre of at least 10\u202fIU/L after completion of the recommended hepatitis B vaccine series.",
+    "ground_truth_chunk_ids": [
+      "cig-hepb::d67cda1b19::4"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-016",
+    "question": "What is the recommended observation period for infants with long\u2011term opioid exposure to monitor for the development of neonatal opioid withdrawal syndrome?",
+    "category": "single-hop",
+    "ground_truth_answer": "All infants with long\u2011term opioid exposure should be observed for at least 72\u202fhours (4\u20137\u202fdays if exposed to buprenorphine or ER/LA opioids and 5\u20137\u202fdays if exposed to methadone).",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::821d7c5784::1"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-017",
+    "question": "What is the recommended follow-up for infants with ophthalmia neonatorum caused by C. trachomatis?",
+    "category": "single-hop",
+    "ground_truth_answer": "Follow-up of infants is recommended to determine whether the initial treatment was effective.",
+    "ground_truth_chunk_ids": [
+      "sti-chlamydia::b555d1760b::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-018",
+    "question": "What is the recommended ceftriaxone dose for uncomplicated gonococcal infection of the pharynx in adolescents and adults weighing less than 150 kg?",
+    "category": "single-hop",
+    "ground_truth_answer": "Ceftriaxone 500 mg IM in a single dose",
+    "ground_truth_chunk_ids": [
+      "sti-gonorrhea-adults::453898c4ff::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-019",
+    "question": "What cure rate was observed in the clinical trial using a single dose of intramuscular gentamicin 240\u202fmg plus oral azithromycin 2\u202fg for uncomplicated gonococcal infection?",
+    "category": "single-hop",
+    "ground_truth_answer": "100% cure (lower one\u2011sided 95% CI bound: 98.5%).",
+    "ground_truth_chunk_ids": [
+      "sti-gonorrhea-adults::10e417979e::1"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-020",
+    "question": "What language approach does PHAC use in this chapter regarding people who give birth or breastfeed?",
+    "category": "single-hop",
+    "ground_truth_answer": "PHAC uses a gender additive approach, using the term \"woman\" alongside gender neutral language, and recognizes that language and documentation should reflect the individual's gender identity in one\u2011on\u2011one care.",
+    "ground_truth_chunk_ids": [
+      "cig-adults::468b2e7598::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-021",
+    "question": "What does the CDC Clinical Practice Guideline recommend for all patients with pain?",
+    "category": "single-hop",
+    "ground_truth_answer": "All patients with pain should receive treatment that provides the greatest benefits relative to risks.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::48292543ee::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-022",
+    "question": "What is the risk of overdose when a patient abruptly returns to a previously prescribed higher opioid dosage after tapering?",
+    "category": "single-hop",
+    "ground_truth_answer": "Clinicians should advise patients about the increased risk for overdose with abrupt return to a previously prescribed higher dosage because of loss of opioid tolerance.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::67de5855bd::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-023",
+    "question": "Which patients should clinicians offer naloxone to when prescribing opioids?",
+    "category": "single-hop",
+    "ground_truth_answer": "Patients at increased risk for overdose, including those with a history of overdose, a history of substance use disorder, sleep\u2011disordered breathing, those taking \u226550\u202fMME/day, those taking benzodiazepines with opioids, and patients at risk for returning to a high dose after tapering or who have recently been released from prison.",
+    "ground_truth_chunk_ids": [
+      "opioid-rx-2022::6139beaac5::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-024",
+    "question": "What is the clinical significance of oropharyngeal Chlamydia trachomatis infection according to the guideline excerpt?",
+    "category": "single-hop",
+    "ground_truth_answer": "The clinical significance of oropharyngeal C. trachomatis infection is unclear, and prevalence is low, even among populations at high risk.",
+    "ground_truth_chunk_ids": [
+      "sti-chlamydia::e74e4390d2::1"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-025",
+    "question": "In which circumstances should post\u2011exposure prophylaxis be offered to susceptible individuals according to the guideline excerpt?",
+    "category": "single-hop",
+    "ground_truth_answer": "Infants born to a mother with acute or chronic hepatitis B infection; percutaneous or mucosal exposure to blood or body fluids potentially containing hepatitis B virus; sexual or household contacts of an acute case or chronic carrier of hepatitis B.",
+    "ground_truth_chunk_ids": [
+      "cig-hepb::7dec3cb25f::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-026",
+    "question": "What should be done for pregnant women with latent syphilis who experience a delay of more than 9 days between doses of benzathine penicillin?",
+    "category": "single-hop",
+    "ground_truth_answer": "They should repeat the full course of therapy.",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-latent::27569f3ff5::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-027",
+    "question": "A pregnant woman with confirmed syphilis infection reports a low\u2011risk history of penicillin allergy (e.g., gastrointestinal intolerance or distant reaction). According to the guideline, what is the recommended approach to safely treat her syphilis infection?",
+    "category": "multi-hop",
+    "ground_truth_answer": "Because no reliable alternatives to penicillin exist for treating syphilis in pregnancy, the patient should first undergo an oral penicillin challenge (or a graded skin test) to confirm that the low\u2011risk allergy history does not represent a true IgE\u2011mediated reaction. If the challenge is negative, she can be treated with penicillin\u202fG. If the challenge is positive or if a severe reaction is confirmed, she should be desensitized and then treated with penicillin\u202fG. This approach combines the need for penicillin in pregnancy (Excerpt\u202fA) with the low\u2011risk oral challenge strategy (Excerpt\u202fB).",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-pregnancy::2e83398e87::0",
+      "sti-penicillin-allergy::5e684662ec::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-028",
+    "question": "What are the recommended vaccination schedules for a 55\u2011year\u2011old adult who has previously received the live zoster vaccine and for a 6\u2011month\u2011old infant with a high\u2011risk medical condition?",
+    "category": "multi-hop",
+    "ground_truth_answer": "For the adult, the recombinant zoster vaccine (RZV) is given as a two\u2011dose series, with the second dose administered at least one year after the live zoster vaccine. For the infant, the pneumococcal conjugate 20\u2011valent (Pneu\u2011C\u201120) vaccine is given on a 4\u2011dose schedule: doses at 2, 4, and 6 months, followed by a fourth dose at 12\u201315 months (with a minimum 8\u2011week interval between doses).",
+    "ground_truth_chunk_ids": [
+      "cig-adults::bc686c57fb::0",
+      "cig-schedules::37439f1731::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-029",
+    "question": "A patient with primary syphilis has a low\u2011risk history of penicillin allergy (e.g., gastrointestinal intolerance, headache, fatigue, nonspecific pruritus, or only a family history). What steps should be taken to confirm penicillin tolerance and what retreatment regimen is recommended if the patient is found to be tolerant?",
+    "category": "multi-hop",
+    "ground_truth_answer": "First, perform an oral penicillin (or other \u03b2\u2011lactam) challenge to document the absence of allergy. If the challenge is negative, retreat the patient with weekly intramuscular injections of benzathine penicillin G 2.4\u202fmillion units for 3\u202fweeks. After retreatment, continue serologic and clinical monitoring at least annually to watch for sustained increases in nontreponemal titers.",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-primary-secondary::3ab5d91dac::1",
+      "sti-penicillin-allergy::5e684662ec::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-030",
+    "question": "For a patient who is HIV\u2011positive, has latent syphilis, and reports a penicillin allergy, what steps should be taken before initiating the standard penicillin therapy for latent syphilis?",
+    "category": "multi-hop",
+    "ground_truth_answer": "The patient should first undergo a validated penicillin allergy evaluation. This includes a skin test using the major determinant (penicilloyl\u2011polylysine) and minor determinants (benzylpenicilloate, benzylpenilloate, or benzylpenicillin isomers). If the skin test is negative, an observed oral challenge with amoxicillin 250\u202fmg for 1\u202fhour should be performed. If both the skin test and the oral challenge are negative, the patient can safely receive the standard latent\u2011syphilis regimen (benzathine penicillin\u202fG 2.4\u202fMU IM weekly for 3\u202fweeks), as persons with HIV infection are treated the same as those without HIV. If either test is positive, an alternative non\u2011\u03b2\u2011lactam regimen should be considered.",
+    "ground_truth_chunk_ids": [
+      "sti-syphilis-latent::d5a6bbb031::0",
+      "sti-penicillin-allergy::9b7b57f0c4::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-031",
+    "question": "For a pregnant woman who is diagnosed with pelvic inflammatory disease (PID) caused by Neisseria gonorrhoeae, what antibiotic regimen should be administered and what sexual activity and partner treatment recommendations should be given?",
+    "category": "multi-hop",
+    "ground_truth_answer": "The patient should receive a single intramuscular dose of ceftriaxone 500\u202fmg, plus treatment for chlamydia if it has not been excluded. She should be advised to abstain from sexual intercourse until therapy is complete, symptoms have resolved, and all sexual partners have been treated. Additionally, she should be tested for HIV and syphilis (and other STIs as indicated) while continuing her chosen contraceptive method during treatment.",
+    "ground_truth_chunk_ids": [
+      "sti-gonorrhea-adults::837dc814a5::0",
+      "sti-pid::e796ade1d0::0"
+    ],
+    "notes": "verified against source text"
+  },
+  {
+    "question_id": "gq-032",
+    "question": "What is the recommended antibiotic for a urinary tract infection in a non-pregnant adult?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-033",
+    "question": "What is the CDC's guidance on seasonal allergy treatment?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-034",
+    "question": "What is screening guidelines for colorectal cancer?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-035",
+    "question": "What is dosing of metformin for type 2 diabetes?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-036",
+    "question": "What is treatment for seasonal influenza in children under 2?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-037",
+    "question": "What is the recommended dose of ibuprofen for adults?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-038",
+    "question": "What is the recommended treatment for tuberculosis?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-039",
+    "question": "What is treatment guidelines for migraine headaches?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-040",
+    "question": "What is recommended chemotherapy regimens for breast cancer?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-041",
+    "question": "What is guidance on managing type 1 diabetes in pediatric patients?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  },
+  {
+    "question_id": "gq-042",
+    "question": "What is guidance on treating high blood pressure in adults?",
+    "category": "unanswerable",
+    "ground_truth_answer": "",
+    "ground_truth_chunk_ids": [],
+    "notes": "confirmed topic absent from corpus (checked via ILIKE search)"
+  }
+]
