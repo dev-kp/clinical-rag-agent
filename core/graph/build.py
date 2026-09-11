@@ -36,6 +36,7 @@ def build_graph(
     graph.add_node("generate", lambda state: generate(state, llm_provider))
     graph.add_node("verify_citations", lambda state: verify_citations(state))
 
+    graph.set_entry_point("plan_query")
     graph.add_edge("plan_query", "retrieve")
     graph.add_edge("retrieve", "grade_evidence")
 
