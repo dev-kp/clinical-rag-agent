@@ -69,9 +69,9 @@ class ScoredResult:
     iterations: int
     latency_seconds: float
     context_recall: float
-    context_precision: float
-    faithfulness: float
-    answer_relevancy: float
+    context_precision: float | None
+    faithfulness: float | None
+    answer_relevancy: float | None
     abstained: bool
     should_abstain: bool
 
@@ -195,6 +195,18 @@ def run_config_5_larger_model(
     return run_config_4_full_graph(q, store, embedder, llm)
 
 
+def _safe_metric(fn, *args) -> float | None:
+    """Run a judge-based metric, returning None instead of crashing the
+    whole sweep if Groq's rate limit can't be cleared even after retries.
+    None is a distinct, visible "unscored" marker in the results, not
+    silently coerced to 0.0 (which would look like a real bad score)."""
+    try:
+        return fn(*args)
+    except RuntimeError as e:
+        print(f"    WARNING: metric failed, recording as unscored: {e}")
+        return None
+
+
 def score_result(result: RunResult, q: GoldenQuestion, api_key: str) -> ScoredResult:
     should_abstain = q.category == "unanswerable"
     abstained = result.answer.strip() == "" or "cannot provide a reliable answer" in result.answer
@@ -205,11 +217,13 @@ def score_result(result: RunResult, q: GoldenQuestion, api_key: str) -> ScoredRe
         iterations=result.iterations,
         latency_seconds=result.latency_seconds,
         context_recall=context_recall(result.retrieved_chunk_ids, q.ground_truth_chunk_ids),
-        context_precision=context_precision(q.question, result.retrieved_texts, api_key)
-        if result.retrieved_texts
-        else 0.0,
-        faithfulness=faithfulness(result.answer, result.retrieved_texts, api_key),
-        answer_relevancy=answer_relevancy(q.question, result.answer, api_key)
+        context_precision=(
+            _safe_metric(context_precision, q.question, result.retrieved_texts, api_key)
+            if result.retrieved_texts
+            else 0.0
+        ),
+        faithfulness=_safe_metric(faithfulness, result.answer, result.retrieved_texts, api_key),
+        answer_relevancy=_safe_metric(answer_relevancy, q.question, result.answer, api_key)
         if not should_abstain
         else 1.0,
         abstained=abstained,
@@ -237,11 +251,14 @@ def run_config(config_num: int, questions: list[GoldenQuestion]) -> list[ScoredR
         print(f"  [{i + 1}/{len(questions)}] {q.question_id} ({q.category})")
         result = runner(q)
         scored.append(score_result(result, q, api_key))
-        # Small pacing delay between questions: each question can trigger
-        # 4-5 Groq calls (generate + 3 judge calls), and bursting through
-        # 42 questions with no gap exhausts the per-minute token budget
-        # faster than reactive retries alone can recover from.
-        time.sleep(2.0)
+        # Pacing delay between questions: each question triggers 4-5 Groq
+        # calls (generate + 3 judge calls) against real clinical-length
+        # contexts. A 2-second delay was not enough to stay under Groq's
+        # per-minute token budget over a sustained 42-question run (hit
+        # persistent 429s even after 10 retries); 6 seconds keeps the
+        # sustained rate low enough that retries are the exception, not
+        # the norm.
+        time.sleep(6.0)
 
     store.close()
     return scored
