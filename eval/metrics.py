@@ -16,7 +16,10 @@ import httpx
 
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 JUDGE_MODEL = "openai/gpt-oss-120b"
-MAX_RETRIES = 5
+# Batch eval runs make many more calls per minute than interactive use, so
+# this needs to tolerate longer bursts of rate limiting than a single query
+# would (see the commit fixing the ablation runner's first failed sweep).
+MAX_RETRIES = 10
 
 
 def context_recall(retrieved_chunk_ids: list[str], ground_truth_chunk_ids: list[str]) -> float:
@@ -73,15 +76,21 @@ def faithfulness(answer: str, retrieved_texts: list[str], api_key: str) -> float
         "You are checking a clinical answer for hallucination.\n\n"
         f"Answer to check:\n{answer}\n\n"
         f"Source context the answer should be based on:\n{context}\n\n"
-        "Break the answer into its individual factual claims. For each "
-        "claim, decide if it is directly supported by the source context.\n\n"
+        "Break the answer into its individual factual claims. A statement "
+        "that the sources lack information (e.g. 'the sources do not "
+        "mention X') is not itself a factual claim to verify against the "
+        "context and should not be counted.\n\n"
         'Respond with ONLY JSON: {"total_claims": N, "supported_claims": M}'
     )
     result = _ask_judge_json(prompt, api_key)
-    if result is None or result.get("total_claims", 0) == 0:
-        return 0.0
+    if result is None:
+        return 0.0  # judge failed to respond at all - genuinely unscoreable
 
-    return result["supported_claims"] / result["total_claims"]
+    total_claims = result.get("total_claims", 0)
+    if total_claims == 0:
+        return 1.0  # no verifiable claims made means no unsupported claims
+
+    return result["supported_claims"] / total_claims
 
 
 def answer_relevancy(question: str, answer: str, api_key: str) -> float:

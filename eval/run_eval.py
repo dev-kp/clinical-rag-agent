@@ -237,6 +237,11 @@ def run_config(config_num: int, questions: list[GoldenQuestion]) -> list[ScoredR
         print(f"  [{i + 1}/{len(questions)}] {q.question_id} ({q.category})")
         result = runner(q)
         scored.append(score_result(result, q, api_key))
+        # Small pacing delay between questions: each question can trigger
+        # 4-5 Groq calls (generate + 3 judge calls), and bursting through
+        # 42 questions with no gap exhausts the per-minute token budget
+        # faster than reactive retries alone can recover from.
+        time.sleep(2.0)
 
     store.close()
     return scored
@@ -253,9 +258,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=int, choices=[1, 2, 3, 4, 5])
     parser.add_argument("--all", action="store_true")
+    parser.add_argument(
+        "--limit", type=int, default=None, help="Only run the first N golden questions"
+    )
     args = parser.parse_args()
 
     questions = load_golden_set()
+    if args.limit:
+        questions = questions[: args.limit]
     print(f"Loaded {len(questions)} golden questions")
 
     configs_to_run = [1, 2, 3, 4, 5] if args.all else [args.config]
