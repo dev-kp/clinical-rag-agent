@@ -1,0 +1,58 @@
+:root {
+  --ground: #f5f6f8;
+  --panel: #ffffff;
+  --panel-sunken: #eef0f3;
+  --border: #d7dbe2;
+  --text: #1a2233;
+  --text-dim: #5b6472;
+  --text-faint: #8b93a1;
+  --accent: #1c7a72;
+  --accent-ink: #0f4d47;
+  --accent-soft: #e3f2f0;
+  --warn: #b8722a;
+  --warn-soft: #fbeee0;
+  --danger: #a1453d;
+  --danger-soft: #fbe9e7;
+  --user-bubble: #eef0f3;
+  --assistant-bubble: #e3f2f0;
+
+  color-scheme: light dark;
+  font: 15px/1.5 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #14171c;
+    --panel: #1b1f26;
+    --panel-sunken: #21262f;
+    --border: #333a45;
+    --text: #e7eaef;
+    --text-dim: #a4acba;
+    --text-faint: #717a89;
+    --accent: #4fb3a9;
+    --accent-ink: #bfe9e3;
+    --accent-soft: #1c2f2d;
+    --warn: #e0a463;
+    --warn-soft: #332a1c;
+    --danger: #e08078;
+    --danger-soft: #332220;
+    --user-bubble: #21262f;
+    --assistant-bubble: #1c2f2d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ground);
+  color: var(--text);
+}

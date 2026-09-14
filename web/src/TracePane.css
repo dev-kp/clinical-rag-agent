@@ -1,0 +1,135 @@
+.trace-pane {
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+}
+
+.trace-pane-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin: 0 0 16px;
+}
+
+.trace-empty {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+}
+
+.trace-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trace-step {
+  background: var(--panel-sunken);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.trace-step-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.trace-step-index {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trace-step-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trace-step-iteration {
+  margin-left: auto;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.trace-verdict {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+.trace-verdict-sufficient {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.trace-verdict-need_more {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.trace-chunks {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trace-chunk {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.trace-chunk-doc {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.trace-chunk-section {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trace-chunk-score {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-faint);
+}
+
+.trace-citations {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.trace-pending {
+  margin-top: 12px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-style: italic;
+}
